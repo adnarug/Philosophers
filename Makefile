@@ -1,10 +1,12 @@
 NAME			=	philosophers.a
 CC				=	cc
-CFLAGS			=	-Werror -Wall -pthread -Wextra
+CFLAGS			=	-Werror -Wall -pthread -Wextra -g
 SRC_DIR			=	src/
 OBJ_DIR			=	obj/
 AR				= 	ar rcs
-SRC_FILES		=	main
+SRC_FILES		=	main\
+					utils/parsing_utils \
+					create_threads
 
 DEF_COLOR = \033[0;80m
 GREEN = \033[0;92m
@@ -26,6 +28,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 
 $(OBJF):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p obj/utils
 
 clean	:
 		@rm -rf $(OBJ_DIR)
