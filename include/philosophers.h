@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:55 by pguranda          #+#    #+#             */
-/*   Updated: 2022/10/31 13:44:26 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/10/31 17:32:47 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdio.h>//to be deleted
 #include <string.h>//to be deleted
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef enum e_boolean
 {
@@ -25,11 +26,26 @@ typedef enum e_boolean
 	FALSE =	0
 }	t_bool;
 
+typedef enum e_philo_state
+{
+	EATING = 1,
+	SLEEPING = 2,
+	THINKING = 3,
+	IS_DEAD = 4
+}	t_state;
+
+typedef enum e_fork_state
+{
+	TAKEN = 1,
+	FREE = 0
+}	t_fork_state;
+
 
 typedef struct s_fork
 {
-	int	id;
-	pthread_mutex_t	mutex;
+	int				id;
+	t_fork_state	state;
+	pthread_mutex_t	*mutex;
 }	t_fork;
 
 typedef struct s_ph_meta 
@@ -46,13 +62,25 @@ typedef struct s_ph_meta
 
 typedef struct s_philo
 {
-	int	id;
-	typedef struct s_philo;
-} t_philo
+	pthread_t		*thread;
+	int				id;
+	t_ph_meta		t_ph_meta;
+	t_fork			*l_fork;
+	t_fork			*r_fork;
+	t_state			state;
+	unsigned long	start_time;
+	unsigned long	end_time;
+	int				time_to_die;
+	int				time_to_sleep;
+	t_ph_meta		*meta;
+} t_philo;
 
 
-int		check_argv(t_ph	*philo_data, char **argv);
-void	print_struct(t_ph *philo);
-int		create_threads(t_ph *philo, pthread_t *philosophers);
+int		check_argv(t_ph_meta	*philo_data, char **argv);
+void	print_struct(t_ph_meta *philo);
+int		create_threads(t_ph_meta *philo, pthread_t *philosophers);
 
+unsigned long	start_time();
+unsigned long	end_time();
+void			mili_sleep(int i);
 #endif

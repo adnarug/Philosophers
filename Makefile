@@ -6,6 +6,7 @@ OBJ_DIR			=	obj/
 AR				= 	ar rcs
 SRC_FILES		=	main\
 					utils/parsing_utils \
+					utils/time \
 					create_threads
 
 DEF_COLOR = \033[0;80m

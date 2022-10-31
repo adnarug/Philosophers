@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:11 by pguranda          #+#    #+#             */
-/*   Updated: 2022/10/31 13:43:52 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:52:42 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
 int main(int argc , char **argv)
 {
 
-	pthread_t		*philosophers;
+	pthread_t			*philosophers;
 	t_ph_meta			philo_data; 
-	int				i;
+	int					i;
 
 	i = 0;
 	if (input_parsing(argc, argv, &philo_data) == EXIT_FAILURE)
@@ -71,7 +71,7 @@ int main(int argc , char **argv)
 	create_threads(&philo_data, philosophers);
 	if (pthread_mutex_destroy(&philo_data.mutex) != 0)
 		return (1);
-	// free(philosophers);
+	free(philosophers);
 	philosophers = NULL;
 	return (0); 
 }
