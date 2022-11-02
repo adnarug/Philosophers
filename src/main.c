@@ -6,26 +6,11 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:11 by pguranda          #+#    #+#             */
-/*   Updated: 2022/10/31 13:52:42 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/02 18:06:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-void	*routine(void* philo_data)
-{
-	int				number;
-	pthread_mutex_t	mutex;
-	void			*res = NULL;
-
-	number = 1;
-	mutex = ((t_ph_meta*)philo_data)->mutex;
-	pthread_mutex_lock(&mutex);
-	number++;
-	printf("\n%d\n", number);
-	pthread_mutex_unlock(&mutex);
-	return res;
-}
 
 
 int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
@@ -51,27 +36,48 @@ int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
 	return (EXIT_SUCCESS);
 }
 
+int	init_philos(t_philo *philos, t_ph_meta *philo_data)
+{
+	int	i;
+	
+	i = 0;
+	philos =  malloc(sizeof(t_philo) * philo_data->num_philo); //maybe we allocate only the pointers here 
+	while (i < philo_data->num_philo)
+	{
+		philos[i].id = i;
+		i++;
+	}
+	//printf("Philosopher id: %d\n", philos[3].id);
+	if (create_threads(philo_data, philos) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	while (i < philos->meta->num_philo)
+	{
+		pthread_join(philos->threads[i], NULL);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
 int main(int argc , char **argv)
 {
 
-	pthread_t			*philosophers;
-	t_ph_meta			philo_data; 
+	t_philo				*philos;
+	t_ph_meta			philo_data;
 	int					i;
 
 	i = 0;
+	philos = NULL;
 	if (input_parsing(argc, argv, &philo_data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	// 
-	philosophers = malloc(sizeof(pthread_t)*atoi(argv[1]));
-	if (philosophers == NULL)
-		return (1);
-	if (pthread_mutex_init(&philo_data.mutex, NULL) != 0)
-		return (1);
+	init_philos(philos, &philo_data);
+	// free(philos->threads);
+	free(philos);
+	system("leaks philosophers");
+	// if (pthread_mutex_init(&philo_data.mutex, NULL) != 0)
+	// 	return (1);
 	// printf("1");
-	create_threads(&philo_data, philosophers);
-	if (pthread_mutex_destroy(&philo_data.mutex) != 0)
-		return (1);
-	free(philosophers);
-	philosophers = NULL;
+	// create_threads(&philo_data, &philos);
+	// eating(&philos);
+	// if (pthread_mutex_destroy(&philo_data.mutex) != 0)
+	// 	return (1);
 	return (0); 
 }

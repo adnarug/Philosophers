@@ -6,47 +6,46 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 13:02:08 by pguranda          #+#    #+#             */
-/*   Updated: 2022/10/31 13:43:52 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/02 18:10:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static void	*routine (void *philo)
+static void	*routine (void *philos)
 {
 	void	*result;
-	t_ph_meta	*phil;
+	t_philo	*phil;
 	int		i;
 
 	i = 0;
-	phil = (t_ph_meta*)philo;
+	phil = (t_philo*)philos;
 	result = NULL;
-	printf("\n%d: death value: %d\n", phil->num_philo, phil->time_die);
+	eating(phil);
 	return result;
 }
 
-int	create_threads(t_ph_meta *philo, pthread_t *philosophers)
+int	create_threads(t_ph_meta *philo_data, t_philo *philos)
 {
-	int		i;
-	int		*num;
+	int		counter;
 
-	i = 0;
-	printf("cheeky check");
-	while (i < philo->num_philo)
+	counter = 0;
+	philos->meta = philo_data;
+	while (counter < philo_data -> num_philo)
 	{
-		num = malloc(sizeof(int));
-		num = &i;
-		if (pthread_create(philosophers + i, NULL, &routine, philo) != 0)
+		philos[counter].threads = malloc(sizeof(pthread_t));
+		if (philos[counter].threads == NULL)
 			return (EXIT_FAILURE);
-		philo->time_die++;
-		i++;
-	}
-	i = 0;
-	while (i < philo->num_philo)
-	{
-		if (pthread_join(*(philosophers + i), NULL) != 0)
+		printf("Cheeky check\n");
+		if (pthread_create(philos[counter].threads, NULL, &routine, philos) != 0)
 			return (EXIT_FAILURE);
-		i++;
+		// philo->time_die++;
+		counter++;
+	// while (i < philo->num_philo)
+	// {
+	// 	if (pthread_join(philos->threads[i], NULL) != 0)
+	// 				return (EXIT_FAILURE);
+	// 	i++;
 	}
 	return (EXIT_SUCCESS);
 }
