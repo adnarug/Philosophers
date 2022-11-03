@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:55 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/02 18:02:27 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/03 12:55:17 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef enum e_fork_state
 
 typedef struct s_fork
 {
-	int				id;
 	t_fork_state	state;
 	pthread_mutex_t	*mutex;
 }	t_fork;
@@ -57,7 +56,7 @@ typedef struct s_ph_meta
 	int					num_meals;
 	t_bool				with_option;
 	t_fork				forks;
-	pthread_mutex_t		mutex;
+	pthread_mutex_t		*mutex;
 } t_ph_meta;
 
 typedef struct s_philo
@@ -84,4 +83,5 @@ unsigned long	end_time();
 void			mili_sleep(int i);
 int				eating(t_philo	*philo);
 int				get_time(void);
+int				init_forks_as_mutex(t_philo *philo);
 #endif

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:11 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/02 18:06:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/03 16:31:48 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,17 @@ int	init_philos(t_philo *philos, t_ph_meta *philo_data)
 	
 	i = 0;
 	philos =  malloc(sizeof(t_philo) * philo_data->num_philo); //maybe we allocate only the pointers here 
-	while (i < philo_data->num_philo)
-	{
-		philos[i].id = i;
-		i++;
-	}
 	//printf("Philosopher id: %d\n", philos[3].id);
 	if (create_threads(philo_data, philos) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	while (i < philos->meta->num_philo)
-	{
-		pthread_join(philos->threads[i], NULL);
-		i++;
-	}
+	// while (i < philos->meta->num_philo)
+	// {
+	// 	pthread_join(philos->threads[i], NULL);
+	// 	i++;
+	// }
 	return (EXIT_SUCCESS);
 }
+
 int main(int argc , char **argv)
 {
 
@@ -71,7 +67,7 @@ int main(int argc , char **argv)
 	init_philos(philos, &philo_data);
 	// free(philos->threads);
 	free(philos);
-	system("leaks philosophers");
+	// system("leaks philosophers");
 	// if (pthread_mutex_init(&philo_data.mutex, NULL) != 0)
 	// 	return (1);
 	// printf("1");

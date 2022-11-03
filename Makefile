@@ -8,6 +8,7 @@ SRC_FILES		=	main\
 					utils/parsing_utils \
 					utils/time \
 					routines/eat \
+					init/forks \
 					create_threads
 
 DEF_COLOR = \033[0;80m
@@ -32,6 +33,7 @@ $(OBJF):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p obj/utils
 	@mkdir -p obj/routines
+	@mkdir -p obj/init
 
 clean	:
 		@rm -rf $(OBJ_DIR)
