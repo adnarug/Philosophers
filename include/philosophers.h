@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:55 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/03 12:55:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/04 17:03:00 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_ph_meta
 	int					time_die;
 	int					time_eat;
 	int					time_sleep;
-	int					num_meals;
+	int					meals_limit;
 	t_bool				with_option;
 	t_fork				forks;
 	pthread_mutex_t		*mutex;
@@ -61,15 +61,15 @@ typedef struct s_ph_meta
 
 typedef struct s_philo
 {
-	pthread_t			*threads;
+	pthread_t			threads;
 	int					id;
-	t_ph_meta			t_ph_meta;
 	t_fork				*l_fork;
 	t_fork				*r_fork;
 	t_state				state;
-	unsigned long		start_time;
+	int					start_time;
+	int					curr_time;
 	unsigned long		end_time;
-	int					time_to_die;
+	int					num_meals;
 	int					time_to_sleep;
 	t_ph_meta			*meta;
 } t_philo;
@@ -77,11 +77,14 @@ typedef struct s_philo
 
 int				check_argv(t_ph_meta	*philo_data, char **argv);
 void			print_struct(t_ph_meta *philo);
-int				create_threads(t_ph_meta *philo, t_philo *philos);
+int				create_thread(t_philo *philos);
 int				start_time();
 unsigned long	end_time();
 void			mili_sleep(int i);
-int				eating(t_philo	*philo);
+int				take_fork(t_philo	*philo);
 int				get_time(void);
 int				init_forks_as_mutex(t_philo *philo);
+void			my_sleep(int ms);
+int				put_fork(t_philo	*philo);
+int				eat(t_philo *philo);
 #endif

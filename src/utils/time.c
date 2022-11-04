@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 16:21:02 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/03 13:21:05 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/04 16:55:00 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,14 @@ unsigned long	end_time()
 void	mili_sleep(int i)
 {
 	usleep(i*1000);
+}
+
+
+void	my_sleep(int ms)
+{
+	int	curtime;
+
+	curtime = get_time();
+	while ((get_time() - curtime) < ms)
+		usleep(100);
 }

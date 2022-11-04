@@ -6,13 +6,18 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:11 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/03 16:31:48 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/04 16:52:22 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-
+/*TODO:
+- protect printf
+- make a watcher
+- introduce timer
+- introduce other routines
+- check the leaks*/
 int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
 {
 	int		i;
@@ -32,24 +37,38 @@ int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
 	philo_data ->time_sleep = atoi(argv[3]);
 	philo_data ->time_eat = atoi(argv[4]);
 	if (philo_data -> with_option == TRUE)
-		philo_data->num_meals = atoi(argv[5]);
+		philo_data->meals_limit = atoi(argv[5]);
 	return (EXIT_SUCCESS);
 }
-
+/*Initialization is always done per thread = per philo*/
 int	init_philos(t_philo *philos, t_ph_meta *philo_data)
 {
 	int	i;
 	
 	i = 0;
 	philos =  malloc(sizeof(t_philo) * philo_data->num_philo); //maybe we allocate only the pointers here 
-	//printf("Philosopher id: %d\n", philos[3].id);
-	if (create_threads(philo_data, philos) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	// while (i < philos->meta->num_philo)
-	// {
-	// 	pthread_join(philos->threads[i], NULL);
-	// 	i++;
-	// }
+	while (i < philo_data->num_philo)
+	{
+		philos[i].meta = philo_data;
+		philos[i].id = i;
+		//printf("Philosopher id: %d\n", philos[3].id)
+		if (init_forks_as_mutex(&philos[i]) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		if (philos[i].id != 0)
+			philos[i].l_fork =  philos[i - 1].r_fork;
+		if (create_thread(&philos[i]) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		philos[i].start_time = get_time();
+		// if (philos[i].id == 3 && philos[i].r_fork->state == FREE && philos[i].l_fork->state == FREE)
+		// 	printf("cheeky check\n");
+		i++;
+	}
+	i = 0;
+	while (i < philos->meta->num_philo)
+	{
+		pthread_join(philos[i].threads, NULL);
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -75,5 +94,6 @@ int main(int argc , char **argv)
 	// eating(&philos);
 	// if (pthread_mutex_destroy(&philo_data.mutex) != 0)
 	// 	return (1);
+	// system("leaks philosophers");
 	return (0); 
 }

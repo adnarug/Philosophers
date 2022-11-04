@@ -7,6 +7,7 @@ AR				= 	ar rcs
 SRC_FILES		=	main\
 					utils/parsing_utils \
 					utils/time \
+					routines/take_fork \
 					routines/eat \
 					init/forks \
 					create_threads
