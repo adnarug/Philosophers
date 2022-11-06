@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eat.c                                              :+:      :+:    :+:   */
+/*   start_dinner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 16:54:14 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/06 16:16:49 by pguranda         ###   ########.fr       */
+/*   Created: 2022/11/06 11:43:20 by pguranda          #+#    #+#             */
+/*   Updated: 2022/11/06 13:13:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philosophers.h"
 
-int eat(t_philo *philo)
+int	start_dinner(t_philo *philo)
 {
-	if (philo->is_dead == TRUE)
-		return(EXIT_FAILURE);
-	if (philo->state == READY_TO_EAT)
+	int		i;
+
+	i = 0;
+	while (i < philo->meta->num_philo)
 	{
-		philo->last_start_eat = get_time() - philo->start_time;
-		printf("%d %d is eating\n", get_time() - philo->start_time, philo->id);
-		my_sleep(philo->meta->time_eat);
-		put_fork(philo);
-		philo->num_meals++;
+		if (pthread_create(&philo[i].threads, NULL, &routine, (void *)&philo[i]) != 0)
+			return (EXIT_FAILURE);
+		i++;
+	}
+	i = 0;
+	monitor_philos(philo);
+	while (i < philo->meta->num_philo)
+	{
+		if (pthread_join(philo[i].threads, NULL) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }

@@ -9,8 +9,13 @@ SRC_FILES		=	main\
 					utils/time \
 					routines/take_fork \
 					routines/eat \
+					routines/sleeping \
+					routines/thinking \
+					routines/driver_routine \
+					routines/start_dinner \
 					init/forks \
-					create_threads
+					init/init_philos \
+					monitor_philos
 
 DEF_COLOR = \033[0;80m
 GREEN = \033[0;92m

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:55 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/04 17:03:00 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/06 16:15:56 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef enum e_boolean
 
 typedef enum e_philo_state
 {
+	READY_TO_EAT = 0,
 	EATING = 1,
 	SLEEPING = 2,
 	THINKING = 3,
@@ -51,9 +52,11 @@ typedef struct s_ph_meta
 {
 	int					num_philo;
 	int					time_die;
+	int					death_timer; //since the beginning of the meal
 	int					time_eat;
 	int					time_sleep;
 	int					meals_limit;
+	t_bool				died;
 	t_bool				with_option;
 	t_fork				forks;
 	pthread_mutex_t		*mutex;
@@ -68,9 +71,11 @@ typedef struct s_philo
 	t_state				state;
 	int					start_time;
 	int					curr_time;
-	unsigned long		end_time;
+	int					time_start_eat;
 	int					num_meals;
 	int					time_to_sleep;
+	int					last_start_eat;
+	t_bool				is_dead;
 	t_ph_meta			*meta;
 } t_philo;
 
@@ -87,4 +92,11 @@ int				init_forks_as_mutex(t_philo *philo);
 void			my_sleep(int ms);
 int				put_fork(t_philo	*philo);
 int				eat(t_philo *philo);
+int				sleeping(t_philo *philo);
+int				thinking(t_philo *philo);
+void			*routine (void *philos);
+t_philo			*init_philos(t_philo *philos, t_ph_meta *philo_data);
+int				start_dinner(t_philo *philo);
+void			monitor_philos(t_philo *philo);
+int			is_dead(t_philo *philo);
 #endif

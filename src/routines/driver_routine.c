@@ -1,43 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   driver_routine.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/31 16:21:02 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/06 15:49:14 by pguranda         ###   ########.fr       */
+/*   Created: 2022/11/06 11:27:47 by pguranda          #+#    #+#             */
+/*   Updated: 2022/11/06 16:06:56 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philosophers.h"
 
-int	get_time(void)
+/*Even numbered threads start with a delay to avoid deadlock*/
+void	*routine (void *philos)
 {
-	struct timeval	current_time;
 
-	gettimeofday(&current_time, NULL);
-	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
-}
+	t_philo	*phil;
+	int		i;
 
-unsigned long	end_time()
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return((tv.tv_sec * 1000) - (tv.tv_usec / 1000));
-}
-
-void	mili_sleep(int i)
-{
-	usleep(i*1000);
-}
-
-
-void	my_sleep(int ms)
-{
-	int	curtime;
-
-	curtime = get_time();
-	while ((get_time() - curtime) < ms)
-		usleep(100);
+	i = 0;
+	phil = philos;
+	// phil->id = 1;
+	if (phil->id % 2 == 0)
+		my_sleep(phil->meta->time_eat / 2);
+	// printf("\n	id of the philo:%d\n", phil->id)
+	while (phil->meta->died == FALSE && phil->is_dead == FALSE)
+	{
+		take_fork(phil);
+		eat(phil);
+		sleeping(phil);
+		thinking(phil);
+	}
+	return (NULL);
 }

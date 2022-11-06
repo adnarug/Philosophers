@@ -6,13 +6,13 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:37:45 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/04 16:11:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/06 12:19:17 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philosophers.h"
 
-int check_argv(t_ph_meta	*philo_data, char **argv)
+int check_argv(t_ph_meta *philo_data, char **argv)
 {
 	int	i;
 

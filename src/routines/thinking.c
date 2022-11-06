@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eat.c                                              :+:      :+:    :+:   */
+/*   thinking.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 16:54:14 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/06 16:16:49 by pguranda         ###   ########.fr       */
+/*   Created: 2022/11/04 17:49:40 by pguranda          #+#    #+#             */
+/*   Updated: 2022/11/06 15:56:27 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philosophers.h"
 
-int eat(t_philo *philo)
+int thinking(t_philo *philo)
 {
+	// if (philo->state == EATING)
+	// 	philo->state = SLEEPING;
 	if (philo->is_dead == TRUE)
 		return(EXIT_FAILURE);
-	if (philo->state == READY_TO_EAT)
-	{
-		philo->last_start_eat = get_time() - philo->start_time;
-		printf("%d %d is eating\n", get_time() - philo->start_time, philo->id);
-		my_sleep(philo->meta->time_eat);
-		put_fork(philo);
-		philo->num_meals++;
-	}
+	// if (pthread_mutex_trylock(philo->r_fork->mutex) != 0 || pthread_mutex_trylock(philo->l_fork->mutex))
+		printf("%d %d is thinking\n", get_time() - philo->start_time, philo->id);
 	return (EXIT_SUCCESS);
 }
