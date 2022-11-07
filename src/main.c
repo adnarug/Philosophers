@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:11 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/06 17:23:44 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/07 14:56:35 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /*TODO:
 - protect printf
+- change the name of the sleep
 - fix the watcher - need to start all threads, then watch
 - check timestamps
 - routine functions are simplisting and not protected
@@ -39,8 +40,8 @@ int	input_parsing(int argc, char **argv, t_ph_meta *philo_data)
 		return (EXIT_FAILURE);
 	philo_data->num_philo = atoi(argv[1]);
 	philo_data ->time_die = atoi(argv[2]);
-	philo_data ->time_sleep = atoi(argv[3]);
-	philo_data ->time_eat = atoi(argv[4]);
+	philo_data ->time_eat = atoi(argv[3]);
+	philo_data ->time_sleep = atoi(argv[4]);
 	if (philo_data -> with_option == TRUE)
 		philo_data->meals_limit = atoi(argv[5]);
 	return (EXIT_SUCCESS);
@@ -51,6 +52,7 @@ int main(int argc , char **argv)
 {
 
 	t_philo				*philos;
+	
 	t_ph_meta			philo_data;
 	int					i;
 
@@ -58,7 +60,7 @@ int main(int argc , char **argv)
 	philos = NULL;
 	if (input_parsing(argc, argv, &philo_data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	philos = init_philos(philos, &philo_data); 
+	philos = init_philos(philos, &philo_data);
 	if (philos == NULL)
 		return (EXIT_FAILURE);
 	// monitor_philos(philos);
@@ -74,6 +76,6 @@ int main(int argc , char **argv)
 	// eating(&philos);
 	// if (pthread_mutex_destroy(&philo_data.mutex) != 0)
 	// 	return (1);
-	// system("leaks philosophers");
+	// system("leaks philosophers");q
 	return (0); 
 }

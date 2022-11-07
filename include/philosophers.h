@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 13:21:55 by pguranda          #+#    #+#             */
-/*   Updated: 2022/11/06 16:15:56 by pguranda         ###   ########.fr       */
+/*   Updated: 2022/11/07 15:07:35 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ typedef enum e_boolean
 
 typedef enum e_philo_state
 {
-	READY_TO_EAT = 0,
+	TOOK_FORKS = 0,
 	EATING = 1,
 	SLEEPING = 2,
 	THINKING = 3,
-	IS_DEAD = 4
+	IS_DEAD = 4,
+	IDLE = 5
 }	t_state;
 
 typedef enum e_fork_state
@@ -45,6 +46,7 @@ typedef enum e_fork_state
 typedef struct s_fork
 {
 	t_fork_state	state;
+	int				num;
 	pthread_mutex_t	*mutex;
 }	t_fork;
 
@@ -56,10 +58,9 @@ typedef struct s_ph_meta
 	int					time_eat;
 	int					time_sleep;
 	int					meals_limit;
+	int					start_time;
 	t_bool				died;
 	t_bool				with_option;
-	t_fork				forks;
-	pthread_mutex_t		*mutex;
 } t_ph_meta;
 
 typedef struct s_philo
